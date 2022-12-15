@@ -1,0 +1,1 @@
+import sys,pandas as pd;((N:=3, rN:=pd.Series(range(N))) and print(list(pd.DataFrame(list(map(lambda _:[(lambda _:(rN*N)[(_.M-_.O+1)%N]+_.M+1)(_),(lambda _:_.M*N+list(map(lambda _:(pd.Series(rN)+N+_-1)%N, rN))[_.O][_.M]+1)(_)],(pd.read_csv(sys.stdin,sep=' ',header=None,names=list('OM')).apply(lambda _:_.apply(ord))-list(map(ord,'AX'))).itertuples(index=False)))).sum())))
