@@ -1,8 +1,9 @@
+import sys
 
-from pathlib import Path
+inp = sys.stdin.read()
 
 elf_cals = [sum(int(x) for x in lines)
-            for elf in Path('./1.txt').read_text().split('\n\n')
+            for elf in inp.split('\n\n')
             if (block := elf.strip())
             if (lines := block.split())]
 
@@ -16,9 +17,7 @@ import pandas as pd
 import io
 elves = (pd.read_csv(
     io.StringIO(('"'
-       + Path('./1.txt')
-         .read_text()
-         .strip()
+       + inp.strip()
          .replace("\n\n",'","')
        + '"')
        .replace("\n", ",")),
