@@ -19,7 +19,7 @@ bps = [{x: int(y) for x, y in m.groupdict().items()}
 def va(a, b, op=add):
     return tuple(map(op, a, b))
 def inc(a, i):
-    return (x+(c==i) for c, x in enumerate(a))
+    return tuple(x+(c==i) for c, x in enumerate(a))
 
 def sim(bp, N):
     cst = {'ore': (bp['ore'], 0, 0, 0),
@@ -45,13 +45,6 @@ def sim(bp, N):
         choices = {}
         outp, rbts = s[:4], s[4:]
         for prd, need in enumerate(cst.values()):
-            #if all(a for a, b in zip(rbts, need) if b):
-                # I have all robot types to create inputs to this new robot.
-                # how long will it take to get the product I need if I wait?
-            #    nt = max(max(0, (nd-op)//rb) for nd, op, rb in zip(need, outp, rbts) if nd)
-            #    nrinv = inc(rbts, prd)
-            #    noinv = va(va(outp, need, sub), (x*(nt+1) for x in rbts))
-            #    choices[prd] = (t+nt+1, S(*noinv, *nrinv))
             if all(a>=b for a, b in zip(s[:4], need)):
                 nrinv = inc(rbts, prd)
                 noinv = va(va(outp, need, sub), rbts)
@@ -71,13 +64,13 @@ def sim(bp, N):
 
 
 scores = {}
-if len(sys.argv) < 2 or int(sys.argv[2]) == 1:
+if len(sys.argv) < 3 or int(sys.argv[2]) == 1:
     for i, bp in enumerate(bps):
         scores[i] = sim(bp, 24)
         print(i, scores[i])
     print(scores, sum((i+1)*s for i, s in scores.items()))
 
-if len(sys.argv) < 2 or int(sys.argv[2]) == 2:
+if len(sys.argv) < 3 or int(sys.argv[2]) == 2:
     scores = {}
     for i, bp in enumerate(bps[:3]):
         scores[i] = sim(bp, 32)
