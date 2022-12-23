@@ -1,5 +1,5 @@
 import sys
-from collections import deque, defaultdict
+from collections import deque, Counter
 from itertools import count
 
 gr = {}
@@ -17,27 +17,23 @@ adj = set(x for d in look for x in d)  # all 8 adj cells
 
 def round():
     frmto = {}
-    mv = 0
     for p, c in gr.items():
         if c == '.': continue
-        if all(gr.get(x, '.')=='.' for x in (p+a for a in adj)):
+        if '#' not in set(map(gr.get,(p+a for a in adj))):
             continue # elf is isolated
 
         for ld in look:
-            if all(gr.get(x, '.')=='.' for x in (p+a for a in ld)):
+            if '#' not in set(map(gr.get,(p+a for a in ld))):
                 frmto[p] = p+ld[0]
                 break
 
-    confl = defaultdict(int)
-    for to in frmto.values():
-        confl[to] += 1
+    confl = Counter(frmto.values())
     for frm, to in frmto.items():
         if confl[to] == 1:
-            gr[frm] = '.'
+            del gr[frm]
             gr[to] = '#'
-            mv += 1
     look.rotate(-1)
-    return mv
+    return Counter(confl.values())[1]
 
 def calcspace(p=False):
     esp = {x:y for x, y in gr.items() if y=='#'}
